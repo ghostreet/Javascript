@@ -1,6 +1,96 @@
-console.log("Bienvenido/a a la calculadora de notas 2023");
+console.log("Bienvenido/a a tu pagina de administración");
 
-let consulta = confirm("¿Ingresar nuevo estudiante?")
+
+
+class Materia {
+    constructor(nombre, profesor, notas){
+        this.nombre = nombre
+        this.profesor = profesor
+        this.notas = notas
+    }
+    promedio(){ 
+        const prom = this.notas.reduce ((acumulador, valor) => acumulador + valor, 0)
+        const promedio = prom / this.notas.length;
+        const notaMaxima = Math.max(...this.notas)
+        const notaMinima = Math.min(...this.notas)
+        console.log(`El promedio de ${this.nombre} es: ${promedio.toFixed(2)} ,la nota máxima es ${notaMaxima} y la mínima ${notaMinima}`)
+    }
+
+    mostrarProfesor(){
+        console.log(`El profesor de ${this.nombre} es: ${this.profesor}`)
+    }
+
+    notaMasAlta(){
+        const notaMaxima = Math.max(...this.notas)
+        console.log(`La nota mas alta de la materia es ${notaMaxima}`)
+    }
+
+    notaMasBaja(){
+        const notaMinima = Math.min(...this.notas)
+        console.log(`La nota mas alta de la materia es ${notaMinima}`)
+    }
+}
+
+
+const materias =[];
+
+function agregarMateria(){
+    const nombreMateria = prompt("Ingrese el nombre de su materia");
+    const nombreProfesor = prompt("Ingrese nombre del profesor a cargo de la materia");
+
+const notas =[];
+let notaActual;
+let notaValida;
+do {
+    notaActual = prompt("Ingrese una nota, o fin para terminar");
+
+    if (notaActual !=="fin"){
+        const notaNumerica = parseFloat(notaActual);
+
+        if (!isNaN(notaNumerica)) {
+            notas.push(notaNumerica);
+            notaValida = true;
+        } else {
+            notaValida = false;
+            alert("Nota errónea. Ingrese una nota valida")  
+            break;
+        }  
+    }else {
+        notaValida = true;
+    }
+    
+} while (!notaValida || notaActual !=="fin");
+
+if (notaValida){
+    const nuevaMateria = new Materia(nombreMateria, nombreProfesor, notas);
+    materias.push(nuevaMateria)
+    }  
+}
+
+ let agregarNuevaMateria = confirm("¿Desea agregar una nueva materia?");
+
+    while (agregarNuevaMateria){
+        agregarMateria();
+        agregarNuevaMateria = confirm("¿Desea agregar otra materia?")
+        }
+
+function mostrarPromedioMaterias (){
+    materias.forEach((materia)=> {materia.promedio(); materia.mostrarProfesor();})
+}
+
+
+mostrarPromedioMaterias();
+
+
+
+
+
+
+
+
+
+
+/*
     
 let promedio
 
@@ -30,6 +120,6 @@ consulta = confirm("¿Desea agregar un nuevo estudiante?");
 
 let promedioGeneral = totalPromedio / cantidadEstudiantes;
 console.log("El promedio general de los estudiantes ingresados es: "+promedioGeneral.toFixed(2));
-console.log("El total de estudiantes ingresados es " +cantidadEstudiantes);
+console.log("El total de estudiantes ingresados es " +cantidadEstudiantes);*/
 
 
