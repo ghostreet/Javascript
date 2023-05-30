@@ -1,125 +1,113 @@
 console.log("Bienvenido/a a tu pagina de administración");
 
+//Obtención de los datos del formulario HTML
+const formulario = document.querySelector("#formulario");
+const nombreInput = document.querySelector("#materiaForm");
+const profesorInput = document.querySelector("#nombreProfe");
+const notasInput = document.querySelector("#notas");
+const resultadoDiv = document.querySelector("#resultado");
+const promedioGeneralDiv = document.querySelector("#resPromGen");
 
+formulario.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    
+    const materia = nombreInput.value;
+    const profesor = profesorInput.value;
+    const notas = notasInput.value.split(" ").map(parseFloat);
 
+    const nuevaMateria = new Materia(materia, profesor, notas)
+    materias.push(nuevaMateria);
+
+    formulario.reset();
+    mostrarPromedioMaterias();
+    guardarMateriasLS();
+});
+//definición de la clase cosntructora
 class Materia {
     constructor(nombre, profesor, notas){
         this.nombre = nombre
         this.profesor = profesor
         this.notas = notas
     }
+
     promedio(){ 
         const prom = this.notas.reduce ((acumulador, valor) => acumulador + valor, 0)
         const promedio = prom / this.notas.length;
         const notaMaxima = Math.max(...this.notas)
         const notaMinima = Math.min(...this.notas)
-        console.log(`El promedio de ${this.nombre} es: ${promedio.toFixed(2)} ,la nota máxima es ${notaMaxima} y la mínima ${notaMinima}`)
+        return {
+            promedio: promedio.toFixed(2),
+            notaMaxima,
+            notaMinima,
+        }
     }
 
     mostrarProfesor(){
-        console.log(`El profesor de ${this.nombre} es: ${this.profesor}`)
-    }
-
-    notaMasAlta(){
-        const notaMaxima = Math.max(...this.notas)
-        console.log(`La nota mas alta de la materia es ${notaMaxima}`)
-    }
-
-    notaMasBaja(){
-        const notaMinima = Math.min(...this.notas)
-        console.log(`La nota mas alta de la materia es ${notaMinima}`)
+        return `El profesor de ${this.nombre} es: ${this.profesor}`
     }
 }
-
 
 const materias =[];
+//función para mostrar los promedios en el DOM
+function mostrarPromedioMaterias() {
+    let resultadoHTML = "";
+    materias.forEach((materia) => {
+        const promedioMateria = materia.promedio();
+        resultadoHTML += `<p>El promedio de ${materia.nombre} es: ${promedioMateria.promedio}, la nota máxima es ${promedioMateria.notaMaxima} y la nota mínima es ${promedioMateria.notaMinima}</p>`;
+        resultadoHTML += `<p>${materia.mostrarProfesor()}</p>`;
+    });
+    resultadoDiv.innerHTML = resultadoHTML;
+}
 
-function agregarMateria(){
-    const nombreMateria = prompt("Ingrese el nombre de su materia");
-    const nombreProfesor = prompt("Ingrese nombre del profesor a cargo de la materia");
+function calcularPromedio(notas){
+    const prom = notas.reduce((acumulador, valor) => acumulador + valor, 0);
+    const promedio = prom /notas.length;
+    return promedio; 
+}
+//botón para motrar le promedio general en el DOM
+const promedioGeneralBtn = document.querySelector(".pgen");
+promedioGeneralBtn.addEventListener("click", mostrarPromedioGeneral);
+//funcionamiento
+function mostrarPromedioGeneral(){
+    const promedios = materias.map((materia) => {
+        const prom = materia.notas.reduce((acumulador, valor) => acumulador + valor, 0);
+        return prom / materia.notas.length;
+    })
 
-const notas =[];
-let notaActual;
-let notaValida;
-do {
-    notaActual = prompt("Ingrese una nota, o fin para terminar");
+    const promedioGeneral = promedios.reduce((acumulador, valor) => acumulador + valor, 0) / promedios.length;
+    
+    const resPromGenDiv = document.querySelector("#resPromGen")
+    promedioGeneralDiv.textContent = `El promedio de todas las materias es: ${promedioGeneral.toFixed(2)}`;
+}
+//botón para ver el detalle d ela snotas de cada materia
+const detalleNotasBtn = document.querySelector(".detalle");
+detalleNotasBtn.addEventListener("click", mostrarDetalleNotas)
+//funcionamiento
+function mostrarDetalleNotas(){
+    let detalleHTML = "";
+    materias.forEach((materia)=> {
+        detalleHTML += `<p>Las notas de ${materia.nombre}</p>`;
+        materia.notas.forEach((nota, index)=> {
+            detalleHTML += `<p>Nota ${index + 1}: ${nota} </p>`;
+        })
+    })
+    resultadoDiv.innerHTML = detalleHTML;
+}
+//botón para volver a la vista anterior
+const volverPromBtn = document.querySelector(".inicioProm");
+volverPromBtn.addEventListener("click", mostrarPromedioMaterias)
 
-    if (notaActual !=="fin"){
-        const notaNumerica = parseFloat(notaActual);
-
-        if (!isNaN(notaNumerica)) {
-            notas.push(notaNumerica);
-            notaValida = true;
-        } else {
-            notaValida = false;
-            alert("Nota errónea. Ingrese una nota valida")  
-            break;
-        }  
-    }else {
-        notaValida = true;
+//almacenamiento de las materias con sus datos en el LS
+function guardarMateriasLS(){
+    localStorage.setItem("materias", JSON.stringify(materias));
+}
+//función para obtener las materias guardadas en LS
+function cargarMateriasLS(){
+    const materiaStorage = localStorage.getItem("materias");
+    if (materiaStorage) {
+        materias = JSON.parse(materiaStorage)
+        mostrarPromedioMaterias();
     }
-    
-} while (!notaValida || notaActual !=="fin");
-
-if (notaValida){
-    const nuevaMateria = new Materia(nombreMateria, nombreProfesor, notas);
-    materias.push(nuevaMateria)
-    }  
 }
 
- let agregarNuevaMateria = confirm("¿Desea agregar una nueva materia?");
-
-    while (agregarNuevaMateria){
-        agregarMateria();
-        agregarNuevaMateria = confirm("¿Desea agregar otra materia?")
-        }
-
-function mostrarPromedioMaterias (){
-    materias.forEach((materia)=> {materia.promedio(); materia.mostrarProfesor();})
-}
-
-
-mostrarPromedioMaterias();
-
-
-
-
-
-
-
-
-
-
-/*
-    
-let promedio
-
-let totalPromedio=0
-let cantidadEstudiantes=0
-
-function calcularProm(nombre, nota1, nota2, nota3){
-    let promedio = (nota1+nota2+nota3)/3;
-    totalPromedio+= promedio;
-    cantidadEstudiantes+=1;
-    return console.log(`El promedio de ${nombre} es: ${promedio.toFixed(2)}`);
-} 
-
-while(consulta){
-let nombre = prompt("Nombre del estudiante:");
-let nota1 = parseInt(prompt("Ingresa la primera nota:"));
-let nota2 = parseInt(prompt("Ingresa la segunda nota:"));
-let nota3 = parseInt(prompt("Ingresa la tercera nota:"));
-
-
-calcularProm(nombre, nota1, nota2, nota3);
-
-consulta = confirm("¿Desea agregar un nuevo estudiante?");
-
-
-}
-
-let promedioGeneral = totalPromedio / cantidadEstudiantes;
-console.log("El promedio general de los estudiantes ingresados es: "+promedioGeneral.toFixed(2));
-console.log("El total de estudiantes ingresados es " +cantidadEstudiantes);*/
-
-
+cargarMateriasLS();

@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+.principal{
+    height: 100vh;
+
+  }
+.titulo{
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    text-align: center;
+    background-color: blanchedalmond;
+}
+
+.tituloForm{
+    padding-bottom: 1rem;
+    margin-left: 10px;
+}
+.contenedorForm{
+    background-color: beige;
+    height: auto;
+    margin-top: 10px;
+
+}
+
+#formulario{
+    display: flex;
+    flex-direction:column;
+    align-items: flex-start;
+    padding-bottom: 1rem;
+    margin-left: 10px;
+    margin-top: 20px;
+}
+
+#formulario input{
+    margin-bottom: 10px;
+}
+#formulario button{
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+.contenedorBtns{
+    margin-bottom: 10px;
+    background-color: bisque;
+    padding-top: 50px;
+}
+.pgen{
+    margin-bottom: 10px;
+}
+
+.detalle{    
+    margin-bottom: 10px;
+}
+
+.inicioProm{
+    margin-bottom: 10px;
+}
+
+.footer{
+    background-color: antiquewhite;
+    height:30vh ;
+}
