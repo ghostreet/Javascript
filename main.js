@@ -137,7 +137,7 @@ btnEx.addEventListener("click",() =>{
         }     
     })
 })
-
+//consulta a la api de la info y posterior seleccion al azar de la misma
 const randomPost = async () => {
     const API_URL = "https://jsonplaceholder.typicode.com/posts";
     try{
@@ -150,7 +150,7 @@ const randomPost = async () => {
         throw new Error("Fallo la carga de la cita")
     }
 };
-
+//funcion que obtiene citas utilizando randomPost y updateCita para mostrarlas en el html
 const fetchCita = () => {
     randomPost()
     .then((post) => {
@@ -158,7 +158,7 @@ const fetchCita = () => {
     })
     .catch(Error)
 };
-
+//funcion para actualizar la cita y el autor que se irá mostrando en el HTML
 const updateCita = (post) => {
     const citaElement = document.querySelector("#citas");
     const autorElement = document.querySelector("#autor");
