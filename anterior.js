@@ -86,3 +86,73 @@ notaMasBaja(){
     const notaMinima = Math.min(...this.notas)
     return `La nota mas baja de la materia es ${notaMinima}`
 } */
+
+/* intento de obtencion de citas desde wikiquote, tuve error cors, asi es que lo deje hasta ahi
+
+const getRandomQuote = async (section) =>{
+    const API_URL = "https://es.wikiquote.org/w/api.php";
+    const params = {
+        format: "json",
+        action: "parse",
+        prop: "text",
+        section: section,
+        disablelimitreport: true,
+        disableeditsection: true,
+        disabletoc: true,
+        disableeditlinks: true
+    };
+
+    const url = `${API_URL}?${formatParams(params)}`;
+
+    try{
+        const response = await fetch(url);
+        const data = await response.jason();
+        const content = data.parse.text["*"];
+        const quote = extractQuote(content);
+        const author = extractAuthor(content);
+        return { quote, author };
+    } catch (error){
+        throw new Error("Fallo la carga de la cita")
+    }
+};
+
+const formatParams = (params) => {
+    return Object.keys(params)
+    .map(key => `${key}=${encodeURIComponent(params[key])}`)
+    .join("&");
+};
+
+const extractQuote = (content) => {
+    const quoteRegex = /<li>(.*?)<\/li>/g;
+    const quoteMatch = quoteRegex.exec(content)
+    return quoteMatch ? quoteMatch[1] : "";
+};
+
+const extractAuthor = (content) => {
+    const authorRegex = /<li><a href="\/wiki\/.*?" .*? title=".*?">(.*?)<\/a><\/li>/g;
+    const authorMatch = authorRegex.exec(content);
+    return authorMatch ? authorMatch[1] : "";
+};
+
+const quoteElement = document.querySelector("#cita");
+const authorElement = document.querySelector("#autor");
+
+const handlerError = (error) => {
+    console.log("error en la obtencion de la cita", error);
+};
+
+const updateCita = (quote, author) =>{
+    quoteElement.innerHTML = result.quote;
+    authorElement.innerHTML = result.author;
+};
+
+const fetchCita = () => {
+    getRandomQuote("Docentes")
+        .then((result) =>{
+            const { quote, author } = result;
+            updateCita(quote, author);
+        })
+        .catch(handlerError);
+}
+
+fetchCita(); */

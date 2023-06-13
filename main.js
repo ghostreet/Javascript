@@ -7,7 +7,10 @@ const profesorInput = document.querySelector("#nombreProfe");
 const notasInput = document.querySelector("#notas");
 const resultadoDiv = document.querySelector("#resultado");
 const promedioGeneralDiv = document.querySelector("#resPromGen");
+const btnSub = document.querySelector(".botonSub");
+const btnEx = document.querySelector(".salida");
 
+//formulario para envio de materias
 formulario.addEventListener("submit", (e)=>{
     e.preventDefault();
     
@@ -21,6 +24,13 @@ formulario.addEventListener("submit", (e)=>{
     formulario.reset();
     mostrarPromedioMaterias();
     guardarMateriasLS();
+
+   
+        Swal.fire({
+            title: "Materia agregada",
+            icon: "success",
+        });
+   
 });
 //definición de la clase cosntructora
 class Materia {
@@ -79,7 +89,7 @@ function mostrarPromedioGeneral(){
     const resPromGenDiv = document.querySelector("#resPromGen")
     promedioGeneralDiv.textContent = `El promedio de todas las materias es: ${promedioGeneral.toFixed(2)}`;
 }
-//botón para ver el detalle d ela snotas de cada materia
+//botón para ver el detalle de las notas de cada materia
 const detalleNotasBtn = document.querySelector(".detalle");
 detalleNotasBtn.addEventListener("click", mostrarDetalleNotas)
 //funcionamiento
@@ -110,4 +120,53 @@ function cargarMateriasLS(){
     }
 }
 
+//botón de despedida al salir de la pagina
+btnEx.addEventListener("click",() =>{
+    Swal.fire({
+        title: "Adios",
+        text: "Gracias por visitar nuestra página, ¡nos vemos pronto!",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Aceptar",
+        cancelButtonText: "Cancelar",
+    }).then((result) =>{
+        if(result.isConfirmed){
+            //y aqui redireccionamos 
+        window.location.href="https://www.youtube.com/watch?v=NmyezTDYKtc";
+        window.close();
+        }     
+    })
+})
+
+const randomPost = async () => {
+    const API_URL = "https://jsonplaceholder.typicode.com/posts";
+    try{
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        const randomIndex = Math.floor(Math.random() * data.length);
+        const post = data[randomIndex];
+        return post;
+    }   catch (error) {
+        throw new Error("Fallo la carga de la cita")
+    }
+};
+
+const fetchCita = () => {
+    randomPost()
+    .then((post) => {
+        updateCita(post)
+    })
+    .catch(Error)
+};
+
+const updateCita = (post) => {
+    const citaElement = document.querySelector("#citas");
+    const autorElement = document.querySelector("#autor");
+    citaElement.innerHTML = `Cita: ${post.body}`;
+    autorElement.innerHTML = `Autor: ${post.title}`;
+};
+fetchCita()
+setInterval(fetchCita, 30000)
+
 cargarMateriasLS();
+
